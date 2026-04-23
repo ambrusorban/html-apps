@@ -1,0 +1,20 @@
+# JetBrains IDE
+.idea/
+
+# Claude Code user-specific settings (keep agents/ checked in)
+.claude/settings.local.json
+.claude/projects/
+.claude/todos/
+.claude/shell-snapshots/
+.claude/statsig/
+.claude/ide/
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor backups
+*.swp
+*.bak
+*~
