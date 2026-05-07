@@ -6,23 +6,36 @@ Built with [Claude Code](https://claude.com/claude-code) as a reference for what
 
 ## Apps in this repo
 
-### [`sm2-loadout/`](./sm2-loadout/) — Astartes Loadout Cogitator
+### Game guides
 
-A quick-reference loadout planner for [Warhammer 40,000: Space Marine 2](https://spacemarine2.fandom.com/) Operations co-op mode. Designed to be glanced at alongside the game when picking a mission.
+#### [`exiles-of-khorne/`](./exiles-of-khorne/) — Exiles of Khorne: New Player's Guide
+A beginner-friendly guide to Skarbrand the Exiled and the Khornate horde faction in Total War: Warhammer III. Covers lore, Khorne and Exiles-specific mechanics, full unit roster, campaign and battle strategy, settlement decisions, diplomacy, economy, and tech priorities. Includes a sibling `titlecard.html` that renders a 1200×630 Open Graph share image.
 
-**Features:**
-- All 12 Operations missions across Avarax, Demerium, Kadaku, Agathon, and Orbit
-- All 7 classes (Tactical, Bulwark, Heavy, Sniper, Vanguard, Assault, Techmarine)
-- Loadout suggestions adapt to selected mission **faction** (Tyranid / Chaos / Mixed) and **difficulty** (Minimal → Absolute)
-- Weapon recommendations color-coded by rarity tier: Standard / Master-Crafted / Artificer / Relic
-- Per-class mission role descriptions explaining what each Battle-Brother should be doing
-- Synergy rationale for the recommended team composition
-- Hazard intel and active difficulty modifiers per mission
-- Mission rewards (XP, Requisition, Armory Data tier) scale with difficulty
-- Keyboard navigation: `←`/`→` to cycle missions, `↑`/`↓` to change difficulty
-- Dark, high-contrast, GTFO-inspired UI
+#### [`ursun-revivalists/`](./ursun-revivalists/) — Ursun Revivalists: New Player's Guide
+A new player's guide to Boris Ursus and his Kislev faction in Total War: Warhammer III. Covers Boris's awakening from the ice, Kislev mechanics (Devotion, Motherland Rituals, Atamans, Supporters), Ursun Revivalists faction effects, hero management, the War Bear Riders doomstack template, and both Immortal Empires opening paths.
 
-**To run:** double-click `sm2-loadout/index.html`.
+#### [`masters-of-innovation/`](./masters-of-innovation/) — Masters of Innovation: New Player's Guide
+A new player's guide to Malakai Makaisson and the Dwarf engineering faction in Total War: Warhammer III. Covers The Forge / Grudges / Underway, Malakai's Adventures, the Spirit of Grungni airship buildings, Gotrek & Felix as starting heroes, the artillery / flying-war-machine doomstack template, and the Kraka Drak surrounded-start campaign plan.
+
+#### [`sm2-loadout/`](./sm2-loadout/) — Astartes Loadout Cogitator
+A quick-reference loadout planner for [Warhammer 40,000: Space Marine 2](https://spacemarine2.fandom.com/) Operations co-op. All 12 missions across Avarax, Demerium, Kadaku, Agathon, and Orbit; all 7 classes; loadout suggestions adapt to mission faction (Tyranid / Chaos / Mixed) and difficulty (Minimal → Absolute); weapons color-coded by rarity tier; per-class role descriptions; team-composition synergy notes; hazard intel and mission rewards. Keyboard navigation: `←`/`→` cycles missions, `↑`/`↓` changes difficulty.
+
+#### [`fs25-guide/`](./fs25-guide/) — FS25 Field Guide
+A field-side reference for Farming Simulator 25 — crop rotations, equipment costs, and other practical look-ups for an active save.
+
+#### [`shogun2-aup-encyclopedia/`](./shogun2-aup-encyclopedia/) — Shogun 2 AUP Encyclopedia (preview)
+A standalone, locally-browsable encyclopedia of units, buildings, and technologies for the Shogun 2 AUP mod. Generated from JSON data via the included `generate.py`.
+
+### Reference & planning tools
+
+#### [`pocket-guide/`](./pocket-guide/) — Toolbox for Digital Artists
+A tabbed pocket reference for digital artists — colour theory, composition, lighting, anatomy, software shortcuts, and other quick look-ups. Tab order is kept alphabetical when adding or renaming sections.
+
+#### [`environmental-art-flowchart/`](./environmental-art-flowchart/) — Tropical Environment Art Project Flowchart
+A planning visualisation for a tropical-environment 3D-art project — production stages, dependencies, and milestones laid out as a navigable flowchart.
+
+#### [`regime-change-analysis/`](./regime-change-analysis/) — Rendszerváltás Reconsidered
+A side-by-side comparative reading of five Hungarian essays on the post-1989 regime change. Long-form scholarly layout with both light and dark themes. (Filename: `regime_change_analysis.html`.)
 
 ## Project conventions
 
@@ -47,4 +60,4 @@ If you use Claude Code to work on this repo, those agents are available out of t
 
 ## License
 
-The code in this repo is provided as-is for reference and learning. Warhammer 40,000, Space Marine 2, all related names, marks, and imagery are © Games Workshop / Saber Interactive — this is an unofficial fan tool with no affiliation.
+The code in this repo is provided as-is for reference and learning. Game-related names, marks, and imagery (Warhammer 40,000, Total War: Warhammer III, Space Marine 2, Farming Simulator 25, Shogun 2) belong to their respective rights holders — Games Workshop, Creative Assembly / SEGA, Saber Interactive, GIANTS Software. These are unofficial fan tools with no affiliation.
