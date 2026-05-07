@@ -17,6 +17,9 @@ A new player's guide to Boris Ursus and his Kislev faction in Total War: Warhamm
 #### [`masters-of-innovation/`](./masters-of-innovation/) — Masters of Innovation: New Player's Guide
 A new player's guide to Malakai Makaisson and the Dwarf engineering faction in Total War: Warhammer III. Covers The Forge / Grudges / Underway, Malakai's Adventures, the Spirit of Grungni airship buildings, Gotrek & Felix as starting heroes, the artillery / flying-war-machine doomstack template, and the Kraka Drak surrounded-start campaign plan.
 
+#### [`northern-provinces/`](./northern-provinces/) — The Northern Provinces: New Player's Guide
+A new player's guide to Miao Ying, the Storm Dragon, and her Cathay faction in Total War: Warhammer III. Covers Cathay mechanics (Harmony / Yin–Yang, Wu-Xing Compass, Ivory Road, Mastery of Elemental Winds), Northern-specific faction effects, Miao Ying's full kit including the Dragon transformation, the Crane-Gunner gunline doomstack, hero management with Alchemists and Astromancers, and a dedicated Great Bastion tab covering gate upgrades and Kurgan Warband threat management.
+
 #### [`sm2-loadout/`](./sm2-loadout/) — Astartes Loadout Cogitator
 A quick-reference loadout planner for [Warhammer 40,000: Space Marine 2](https://spacemarine2.fandom.com/) Operations co-op. All 12 missions across Avarax, Demerium, Kadaku, Agathon, and Orbit; all 7 classes; loadout suggestions adapt to mission faction (Tyranid / Chaos / Mixed) and difficulty (Minimal → Absolute); weapons color-coded by rarity tier; per-class role descriptions; team-composition synergy notes; hazard intel and mission rewards. Keyboard navigation: `←`/`→` cycles missions, `↑`/`↓` changes difficulty.
 
