@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tropical Environment Art — Project Flowchart</title>
+<style>
+  :root {
+    --bg: #0e1512;
+    --bg-2: #14201b;
+    --panel: #182722;
+    --panel-2: #1f3029;
+    --line: #2a4138;
+    --ink: #e8efe9;
+    --ink-dim: #a7bcb1;
+    --ink-mute: #7d958a;
+    --accent-1: #6dd3a8;   /* gaea / terrain */
+    --accent-2: #5fb8d6;   /* unreal */
+    --accent-3: #e0b557;   /* foliage */
+    --accent-4: #6a9bd6;   /* water */
+    --accent-5: #e08a57;   /* lighting */
+    --warn: #d67a6d;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+    --radius: 14px;
+    --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(109,211,168,.08), transparent 60%),
+      radial-gradient(900px 500px at -10% 20%, rgba(95,184,214,.06), transparent 60%),
+      var(--bg);
+    color: var(--ink);
+    font-family: var(--font);
+    line-height: 1.55;
+    font-size: 16px;
+  }
+
+  header.hero {
+    padding: 56px 28px 28px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  header.hero .tag {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--accent-1);
+    border: 1px solid var(--line);
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(109,211,168,.06);
+  }
+  header.hero h1 {
+    font-size: clamp(28px, 4vw, 44px);
+    margin: 14px 0 6px;
+    letter-spacing: -0.02em;
+  }
+  header.hero p.subtitle {
+    color: var(--ink-dim);
+    font-size: 17px;
+    margin: 0 0 22px;
+    max-width: 70ch;
+  }
+  header.hero .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    color: var(--ink-mute);
+    font-size: 13px;
+  }
+  header.hero .meta span { white-space: nowrap; }
+
+  nav.jump {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(14,21,18,.85);
+    backdrop-filter: saturate(140%) blur(10px);
+    -webkit-backdrop-filter: saturate(140%) blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav.jump .inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 10px 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 4px;
+    align-items: center;
+  }
+  nav.jump a {
+    color: var(--ink-dim);
+    text-decoration: none;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    border: 1px solid transparent;
+  }
+  nav.jump a:hover { color: var(--ink); background: var(--panel); border-color: var(--line); }
+  nav.jump .spacer { flex: 1; }
+  nav.jump button.print {
+    background: var(--panel);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  nav.jump button.print:hover { background: var(--panel-2); }
+
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px;
+  }
+
+  section { margin: 36px 0; }
+
+  h2 {
+    font-size: 22px;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+  }
+  h3 {
+    font-size: 16px;
+    margin: 18px 0 8px;
+    color: var(--ink);
+  }
+
+  .intro-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+  }
+  .intro-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+  }
+  .intro-card h4 {
+    margin: 0 0 6px;
+    font-size: 13px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .intro-card p { margin: 0; color: var(--ink-dim); font-size: 14px; }
+
+  /* mermaid chart styling */
+  .mermaid-wrap {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px 18px;
+    overflow-x: auto;
+  }
+  .mermaid {
+    min-width: 720px;
+  }
+
+  /* Phase cards */
+  .phase {
+    position: relative;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px 26px 8px;
+    margin-bottom: 22px;
+    border-left: 4px solid var(--accent-1);
+  }
+  .phase[data-phase="2"] { border-left-color: var(--accent-2); }
+  .phase[data-phase="3"] { border-left-color: var(--accent-3); }
+  .phase[data-phase="4"] { border-left-color: var(--accent-4); }
+  .phase[data-phase="5"] { border-left-color: var(--accent-5); }
+
+  .phase-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+  .phase-num {
+    flex: 0 0 auto;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    color: var(--accent-1);
+    font-family: var(--mono);
+  }
+  .phase[data-phase="2"] .phase-num { color: var(--accent-2); }
+  .phase[data-phase="3"] .phase-num { color: var(--accent-3); }
+  .phase[data-phase="4"] .phase-num { color: var(--accent-4); }
+  .phase[data-phase="5"] .phase-num { color: var(--accent-5); }
+  .phase-title {
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .phase-soft {
+    color: var(--ink-mute);
+    font-size: 13px;
+    margin: 0;
+  }
+  .phase-goal {
+    margin: 4px 0 16px;
+    color: var(--ink-dim);
+    font-style: italic;
+  }
+
+  details.qa {
+    border-top: 1px solid var(--line);
+    padding: 14px 0;
+  }
+  details.qa[open] { padding-bottom: 4px; }
+  details.qa summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ink);
+    list-style: none;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  details.qa summary::-webkit-details-marker { display: none; }
+  details.qa summary::before {
+    content: "▸";
+    color: var(--ink-mute);
+    font-size: 12px;
+    transition: transform .15s ease;
+    display: inline-block;
+  }
+  details.qa[open] summary::before { transform: rotate(90deg); }
+  details.qa summary .q-tag {
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 2px 6px;
+    margin-left: auto;
+  }
+
+  .qa-body {
+    padding: 8px 0 4px 22px;
+    color: var(--ink-dim);
+  }
+  .qa-body p { margin: 8px 0; }
+  .qa-body ul, .qa-body ol { margin: 8px 0; padding-left: 22px; }
+  .qa-body li { margin: 4px 0; }
+  .qa-body strong { color: var(--ink); }
+  .qa-body code {
+    font-family: var(--mono);
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 1px 6px;
+    font-size: 13px;
+    color: var(--ink);
+  }
+
+  table.maps {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 14px;
+  }
+  table.maps th, table.maps td {
+    border: 1px solid var(--line);
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+  table.maps th {
+    background: var(--bg-2);
+    color: var(--ink);
+    font-weight: 600;
+  }
+  table.maps td.use { color: var(--ink-dim); }
+
+  .callout {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent-1);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 12px 0;
+    font-size: 14px;
+    color: var(--ink-dim);
+  }
+  .callout.warn { border-left-color: var(--warn); }
+  .callout.tip  { border-left-color: var(--accent-3); }
+  .callout strong { color: var(--ink); }
+
+  .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 8px 0 14px;
+  }
+  .pill {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 12px;
+    color: var(--ink-dim);
+  }
+
+  footer {
+    max-width: 1100px;
+    margin: 40px auto 60px;
+    padding: 20px 28px 0;
+    color: var(--ink-mute);
+    font-size: 13px;
+    border-top: 1px solid var(--line);
+  }
+
+  /* Print styles */
+  @media print {
+    :root {
+      --bg: #ffffff;
+      --bg-2: #f3f4f2;
+      --panel: #ffffff;
+      --panel-2: #f3f4f2;
+      --line: #c7cdc9;
+      --ink: #111;
+      --ink-dim: #333;
+      --ink-mute: #555;
+    }
+    body { background: #fff; color: #111; }
+    nav.jump { display: none; }
+    .phase { box-shadow: none; break-inside: avoid; }
+    details.qa[open] .qa-body { display: block !important; }
+    details.qa { padding: 8px 0; }
+    details.qa summary::before { display: none; }
+    .mermaid-wrap { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <span class="tag">Environmental Art · Project Plan</span>
+  <h1>Tropical Environment Art</h1>
+  <p class="subtitle">A sequenced flowchart for taking a hand-built Gaea 2.2 terrain into a tropical Unreal&nbsp;5.7 scene with PCG foliage, river systems and cinematic lighting — used as both a working guide and a project journal to ship with the final renders.</p>
+  <div class="meta">
+    <span>Software: Gaea 2.2 · Unreal Engine 5.7</span>
+    <span>·</span>
+    <span>Pipeline: Heightfield → Landscape → PCG → Water → Light</span>
+    <span>·</span>
+    <span>Author: <em>Ambrus Orbán</em></span>
+  </div>
+</header>
+
+<nav class="jump">
+  <div class="inner">
+    <a href="#overview">Overview</a>
+    <a href="#flow">Flow diagram</a>
+    <a href="#phase-1">1. Gaea</a>
+    <a href="#phase-2">2. Unreal Setup</a>
+    <a href="#phase-3">3. PCG Foliage</a>
+    <a href="#phase-4">4. Water</a>
+    <a href="#phase-5">5. Lighting</a>
+    <a href="#glossary">Glossary</a>
+    <span class="spacer"></span>
+    <button class="print" onclick="window.print()">Print / PDF</button>
+  </div>
+</nav>
+
+<main>
+
+  <!-- OVERVIEW -->
+  <section id="overview">
+    <h2>Project at a glance</h2>
+    <div class="intro-grid">
+      <div class="intro-card">
+        <h4>Goal</h4>
+        <p>Final render(s) of a believable tropical landscape — visible foliage variety, a flowing river, atmospheric lighting.</p>
+      </div>
+      <div class="intro-card">
+        <h4>Key constraint</h4>
+        <p>Foliage placement must respect terrain: no palms on cliffs, ferns near water, sand at river banks. PCG masks make this automatic.</p>
+      </div>
+      <div class="intro-card">
+        <h4>Critical order</h4>
+        <p>Build → Import → <strong>Water first</strong> (it carves the landscape) → <strong>then foliage</strong> → lighting last.</p>
+      </div>
+      <div class="intro-card">
+        <h4>Deliverable</h4>
+        <p>One or more cinematic stills / sequences plus this document, sharing the process and decisions.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FLOW DIAGRAM -->
+  <section id="flow">
+    <h2>Flow diagram</h2>
+    <p style="color:var(--ink-dim);max-width:75ch;">Numbered phases match how the work is described below. Arrows show the actual <em>execution</em> order: water is placed before final foliage because rivers modify the landscape geometry.</p>
+    <div class="mermaid-wrap">
+      <pre class="mermaid">
+flowchart TD
+    P1["<b>① Gaea Terrain</b><br/>Build height + masks<br/>Export via Unreal node"]:::g
+    P2["<b>② Unreal Setup</b><br/>Project + plugins<br/>Import landscape<br/>Verify scale"]:::u
+    P4["<b>④ Water Bodies</b><br/>Rivers carve landscape<br/>Lake / ocean as needed"]:::w
+    P3["<b>③ PCG Foliage</b><br/>Mask-driven density<br/>Tropical biome layers"]:::f
+    P5["<b>⑤ Lighting</b><br/>Env. Light Mixer<br/>Lumen + post-process"]:::l
+    R["<b>Final Renders</b><br/>Movie Render Queue"]:::r
+
+    P1 -->|heightmap + masks| P2
+    P2 -->|landscape ready| P4
+    P4 -->|repaint splat layers| P3
+    P3 --> P5
+    P5 --> R
+
+    classDef g fill:#1c2f27,stroke:#6dd3a8,stroke-width:1.5px,color:#e8efe9;
+    classDef u fill:#1c2a33,stroke:#5fb8d6,stroke-width:1.5px,color:#e8efe9;
+    classDef f fill:#332c1c,stroke:#e0b557,stroke-width:1.5px,color:#e8efe9;
+    classDef w fill:#1c2433,stroke:#6a9bd6,stroke-width:1.5px,color:#e8efe9;
+    classDef l fill:#33231c,stroke:#e08a57,stroke-width:1.5px,color:#e8efe9;
+    classDef r fill:#202c25,stroke:#a7bcb1,stroke-width:1.5px,color:#e8efe9;
+      </pre>
+    </div>
+  </section>
+
+  <!-- PHASE 1 — GAEA -->
+  <section id="phase-1">
+    <article class="phase" data-phase="1">
+      <div class="phase-head">
+        <div class="phase-num">01</div>
+        <div>
+          <h2 class="phase-title">Gaea 2.2 — Terrain &amp; mask creation</h2>
+          <p class="phase-soft">All the procedural data Unreal will need is generated here. Get this right and the rest of the pipeline becomes plumbing.</p>
+        </div>
+      </div>
+      <p class="phase-goal">Produce a tropical heightfield plus a full set of masks (slope, flow, soil, sediment, curvature, …) and export them as one synchronized package via the <strong>Unreal</strong> node.</p>
+      <div class="pill-row">
+        <span class="pill">Heightfield</span><span class="pill">Erosion</span><span class="pill">Masks</span><span class="pill">Tile-aware export</span>
+      </div>
+
+      <details class="qa" open>
+        <summary>How to set up the project for exporting to Unreal? <span class="q-tag">Q1.1</span></summary>
+        <div class="qa-body">
+          <ol>
+            <li><strong>New project</strong> · <code>File → New</code>. Pick the <em>Terrain</em> template.</li>
+            <li><strong>Project size</strong> (Properties panel): set the world size in km that you want in Unreal. e.g. <code>4 km × 4 km</code>. This is the number you'll match in Unreal's landscape transform later.</li>
+            <li><strong>Viewport resolution</strong>: keep it low (1024) for fast iteration. Final resolution is set at build time.</li>
+            <li><strong>Build resolution</strong>: pick a value that maps cleanly to a recommended Unreal landscape size. Practical pairs: <code>1009</code>, <code>2017</code>, <code>4033</code>, <code>8129</code>. For a 4&nbsp;km island, <code>4033</code> gives you ~1&nbsp;m per quad.</li>
+            <li><strong>Tile the build</strong> (optional, for World Partition / open-world): in the Build panel set tile count, e.g. <code>2×2</code> or <code>4×4</code>. Each tile then exports as a separate set of files Unreal can stream.</li>
+            <li><strong>File formats</strong>: Heightmap → <code>R16</code> (16-bit raw) or <code>16-bit PNG</code>. Masks → <code>8-bit PNG</code>. Color → <code>8-bit PNG</code>.</li>
+            <li><strong>Output folder</strong>: pick a clean dedicated path — the Unreal bridge will scan it.</li>
+          </ol>
+          <div class="callout tip"><strong>Tip:</strong> Match Gaea's km size to Unreal's landscape XY scale up front. Re-scaling later breaks Z proportions and ruins erosion fidelity.</div>
+        </div>
+      </details>
+
+      <details class="qa">
+        <summary>How does the Unreal export node work? <span class="q-tag">Q1.2</span></summary>
+        <div class="qa-body">
+          <p>The <strong>Unreal</strong> node lives in the <em>Output</em> category. It is the only node you should connect to when exporting for UE — it bundles every map together so the Gaea2Unreal bridge can pick them up as one package.</p>
+          <ul>
+            <li><strong>Multi-port</strong>: the node has dedicated input ports for <em>Height</em>, <em>Color</em>, and a stack of <em>Mask</em> inputs. You wire each Gaea output (your erosion's Wear output, a Slope node, a Flow output, a SoilMap, …) into a separate mask port.</li>
+            <li><strong>Naming</strong>: rename each mask port (right-click) to something stable like <code>Slope</code>, <code>Flow</code>, <code>Sediment</code>. These names become the layer names in Unreal — keep them tidy now to save renaming material layers later.</li>
+            <li><strong>Resolution</strong>: the node inherits the project's build resolution. Don't override per-node unless you know why.</li>
+            <li><strong>Tiling</strong>: when the project is tiled, the Unreal node writes one folder per tile, with consistent naming the bridge uses to reconstruct the world.</li>
+            <li><strong>Build</strong>: hit the build button in the toolbar (not the per-node preview). Only a real build writes the disk files the Unreal plugin needs.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="qa">
+        <summary>Which maps should I export for use with PCG in Unreal? <span class="q-tag">Q1.3</span></summary>
+        <div class="qa-body">
+          <p>Export every mask the procedural foliage system might want to read. It's cheap to bake; expensive to redo.</p>
+          <table class="maps">
+            <thead><tr><th>Gaea output</th><th>Source nodes</th><th class="use">What PCG / materials use it for</th></tr></thead>
+            <tbody>
+              <tr><td>Height</td><td>Terminal of erosion chain</td><td class="use">Landscape geometry. Mandatory.</td></tr>
+              <tr><td>Slope</td><td><code>Slope</code> node</td><td class="use">Cull palms / trees on steep ground; rocks bias.</td></tr>
+              <tr><td>Flow</td><td>Erosion's <em>Flow</em> output, or <code>RiverMap</code></td><td class="use">Riverbed, riparian ferns, wet-shader bias.</td></tr>
+              <tr><td>Wear / Wetness</td><td>Erosion outputs</td><td class="use">Moss, lichen, undergrowth bias.</td></tr>
+              <tr><td>Sediment / Deposits</td><td>Erosion's <em>Deposits</em>, <code>Sediment</code></td><td class="use">Sand, beach, river-edge gravel; palm zones.</td></tr>
+              <tr><td>Soil / SoilMap</td><td><code>SoilMap</code></td><td class="use">Healthy ground = canopy trees, dense ferns.</td></tr>
+              <tr><td>Curvature / Cavity</td><td><code>Curvature</code></td><td class="use">Concave = valleys (undergrowth); convex = ridges.</td></tr>
+              <tr><td>Elevation bands</td><td><code>Height</code> → <code>Range</code> selector</td><td class="use">Altitude biomes (e.g. lowland palms vs. highland).</td></tr>
+              <tr><td>Color / Albedo</td><td><code>SatMaps</code> / <code>CLUTer</code></td><td class="use">Reference tint for the master material; not mandatory.</td></tr>
+              <tr><td>Normal</td><td>Auto from height</td><td class="use">Optional — Unreal can derive its own.</td></tr>
+            </tbody>
+          </table>
+          <div class="callout"><strong>Minimum viable set:</strong> Height + Slope + Flow + Sediment + Soil. Everything else makes the foliage <em>better</em> but is not blocking.</div>
+        </div>
+      </details>
+    </article>
+  </section>
+
+  <!-- PHASE 2 — UNREAL SETUP -->
+  <section id="phase-2">
+    <article class="phase" data-phase="2">
+      <div class="phase-head">
+        <div class="phase-num">02</div>
+        <div>
+          <h2 class="phase-title">Unreal Engine 5.7 — Project setup &amp; landscape import</h2>
+          <p class="phase-soft">A clean project, the right plugins, and a scaled landscape before any artistry begins.</p>
+        </div>
+      </div>
+      <p class="phase-goal">Stand up a UE 5.7 project, enable the plugins you'll use later, import the Gaea build with correct world dimensions, and verify the landscape scale matches Gaea before moving on.</p>
+      <div class="pill-row">
+        <span class="pill">UE 5.7</span><span class="pill">PCG</span><span class="pill">Water</span><span class="pill">Gaea2Unreal</span><span class="pill">World Partition</span>
+      </div>
+
+      <details class="qa" open>
+        <summary>How to set up the Unreal project? <span class="q-tag">Q2.1</span></summary>
+        <div class="qa-body">
+          <ol>
+            <li><strong>Engine version</strong>: install UE 5.7 from the Epic Launcher.</li>
+            <li><strong>New project</strong>: <em>Games → Blank</em>, Blueprint, no starter content (you don't want UE's default materials competing with yours), Quality: Maximum, Ray Tracing on.</li>
+            <li><strong>World type</strong>: for a single hero scene, an <em>Open World</em> template (UE 5.7 ships with one) is convenient — it pre-enables World Partition and a base setup. For tighter scenes, <em>Blank</em> is fine.</li>
+            <li><strong>Project Settings → Rendering</strong>: confirm <em>Dynamic Global Illumination = Lumen</em>, <em>Reflection Method = Lumen</em>, <em>Shadow Map Method = Virtual Shadow Maps</em>, <em>Generate Mesh Distance Fields = on</em>.</li>
+            <li><strong>Plugins to enable</strong> (Edit → Plugins, restart):
+              <ul>
+                <li><strong>Water</strong> — rivers, lakes, ocean.</li>
+                <li><strong>Procedural Content Generation Framework (PCG)</strong>.</li>
+                <li><strong>PCG Geometry Script</strong>.</li>
+                <li><strong>Landmass</strong> (dependency of Water).</li>
+                <li><strong>Gaea2Unreal Bridge</strong> — install via Fab/Epic Marketplace, then enable.</li>
+                <li>Optional: <strong>Volumetrics</strong>, <strong>Niagara</strong> for FX.</li>
+              </ul>
+            </li>
+            <li><strong>Source control</strong>: at minimum, init a local Git LFS repo for <code>/Content</code>. Heightmaps and texture sets are large.</li>
+          </ol>
+        </div>
+      </details>
+
+      <details class="qa">
+        <summary>How to import the landscape from Gaea? <span class="q-tag">Q2.2</span></summary>
+        <div class="qa-body">
+          <p><strong>Two routes</strong> — pick whichever your bridge plugin version supports best.</p>
+          <h3>Route A — Gaea2Unreal bridge (preferred)</h3>
+          <ol>
+            <li>In UE, open the bridge window (usually <em>Window → Gaea Bridge</em> or similar after enabling the plugin).</li>
+            <li>Point it at the folder Gaea wrote on build.</li>
+            <li>The bridge creates: a Landscape actor with correct quad/section/component layout, a <em>LandscapeLayerInfo</em> for each mask, and a starter material with mask-blended layers.</li>
+            <li>Click into the landscape's <em>Paint</em> tab — your Gaea masks should appear as paintable layers, already filled.</li>
+          </ol>
+          <h3>Route B — Manual heightmap import</h3>
+          <ol>
+            <li>Modes → <em>Landscape</em> → <em>Manage</em> tab → <em>Import from File</em>.</li>
+            <li>Pick the heightmap (R16/PNG). UE auto-suggests Sections / Components — accept the closest <em>Recommended</em> entry whose total resolution matches your Gaea export.</li>
+            <li>Set Location (0,0,0), Rotation (0,0,0), and the XY/Z scale (see Q2.4 below).</li>
+            <li>For each mask: in the Paint tab, create a <em>Layer Info</em>, then import the corresponding PNG via the layer's <em>Import from /File</em> dropdown.</li>
+          </ol>
+          <div class="callout warn"><strong>Gotcha:</strong> Importing tiled Gaea output manually is painful — the bridge handles the per-tile alignment for you. Use it for tiled / World Partition projects.</div>
+        </div>
+      </details>
+
+      <details class="qa">
+        <summary>How does the Gaea2Unreal plugin work? <span class="q-tag">Q2.3</span></summary>
+        <div class="qa-body">
+          <ul>
+            <li>It's a <strong>file-format-aware bridge</strong>: it reads the manifest Gaea writes next to the heightmaps/masks (resolution, world size in km, tile layout, mask names).</li>
+            <li>From that manifest it computes the right Unreal landscape parameters (component grid, scale) so 1&nbsp;Gaea&nbsp;m → 1&nbsp;Unreal&nbsp;m.</li>
+            <li>It registers the masks as <em>LandscapeLayerInfoObjects</em> in your <code>/Content</code>, so they're paint-stamped into the landscape and can be sampled by the material and by PCG.</li>
+            <li>It can be re-run: rebuild in Gaea, point the bridge at the same folder, and it will refresh height + masks <em>without</em> losing the foliage / water work you've done downstream.</li>
+            <li>It does <strong>not</strong> create rivers, foliage, or water automatically — those are still your job in UE.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="qa">
+        <summary>How do size, cell size and scale relate to Gaea's size settings? <span class="q-tag">Q2.4</span></summary>
+        <div class="qa-body">
+          <p><strong>Unreal landscape math, in plain terms:</strong></p>
+          <ul>
+            <li><strong>Quad</strong> = the smallest grid square in the landscape mesh. <em>1 quad ≈ 1&nbsp;m</em> by default.</li>
+            <li><strong>Section</strong> = a block of quads (7×7 or 15×15).</li>
+            <li><strong>Component</strong> = 1 or 4 sections; the unit of streaming/culling.</li>
+            <li><strong>Vertex resolution</strong> = (components × section&nbsp;quads) + 1. The "<em>+1</em>" is why recommended resolutions are 505, 1009, 2017, 4033, 8129 — each is <code>N × 63 + 1</code>.</li>
+          </ul>
+          <p><strong>Default scale</strong> in UE is 100 on every axis:</p>
+          <ul>
+            <li>XY scale 100 → 1 quad = 100&nbsp;cm = 1&nbsp;m.</li>
+            <li>Z scale 100 → height range is ±256&nbsp;m (total 512&nbsp;m). Double Z to 200 → ±512&nbsp;m.</li>
+          </ul>
+          <p><strong>Worked example</strong> matching Gaea:</p>
+          <ul>
+            <li>Gaea project size: <code>4&nbsp;km × 4&nbsp;km</code>, build resolution <code>4033</code>.</li>
+            <li>Real metres per quad = 4000 / (4033 − 1) = <code>~0.992&nbsp;m</code>.</li>
+            <li>Set landscape XY scale = 0.992 × 100 = <code>~99.2</code> (or use 100 and accept a 0.8% rounding error).</li>
+            <li>If Gaea peaks are at 800&nbsp;m elevation, set Z scale so range covers it: <code>Z = 800 / 256 × 100 ≈ 312</code>. Round up so erosion has headroom.</li>
+          </ul>
+          <div class="callout tip"><strong>Sanity check:</strong> after import, drop a 1&nbsp;m&nbsp;reference cube at sea level, then walk it up to a peak you remember in Gaea. If the peak is double-height or half-height, your Z scale is off.</div>
+        </div>
+      </details>
+    </article>
+  </section>
+
+  <!-- PHASE 3 — PCG FOLIAGE -->
+  <section id="phase-3">
+    <article class="phase" data-phase="3">
+      <div class="phase-head">
+        <div class="phase-num">03</div>
+        <div>
+          <h2 class="phase-title">PCG foliage — mask-driven biome layering</h2>
+          <p class="phase-soft">The system that places thousands of plants in seconds, using your Gaea masks as the rulebook.</p>
+        </div>
+      </div>
+      <p class="phase-goal">Build a PCG graph that reads landscape layers and the photoscanned tropical pack to scatter ferns, palms, canopy trees and beach vegetation in the right places automatically.</p>
+      <div class="pill-row">
+        <span class="pill">PCG Volume</span><span class="pill">Landscape Sampler</span><span class="pill">Density Filter</span><span class="pill">HISM</span>
+      </div>
+
+      <details class="qa" open>
+        <summary>How to set up PCG for foliage? <span class="q-tag">Q3.1</span></summary>
+        <div class="qa-body">
+          <ol>
+            <li><strong>Place a PCG Volume</strong> covering the area you want vegetated. Resize it to your island — bigger volumes work, but for iteration speed start with a small test region.</li>
+            <li><strong>Create a PCG Graph</strong> asset (right-click in Content Browser → PCG → Graph).</li>
+            <li>Inside the graph:
+              <ul>
+                <li><code>Get Landscape Data</code> → gives you the surface to scatter on.</li>
+                <li><code>Surface Sampler</code> → emit candidate points across the landscape at a given density.</li>
+                <li><code>Get Landscape Layer Weight</code> (one per mask: Slope, Flow, Soil…) → reads the painted layer at each point.</li>
+                <li><code>Density Filter</code> → drops points whose density is below a threshold. Chain these to combine masks (e.g. Soil > 0.4 AND Slope < 0.3).</li>
+                <li><code>Transform Points</code> → randomise rotation, scale; align to surface normal.</li>
+                <li><code>Static Mesh Spawner</code> → spawn the actual plants as <em>Hierarchical Instanced Static Meshes</em> (HISM, default — good for performance).</li>
+              </ul>
+            </li>
+            <li><strong>Assign the graph</strong> to the PCG Volume's <em>Graph</em> property, then hit <em>Generate</em> on the volume.</li>
+            <li><strong>Iterate</strong>: tweak thresholds, re-generate. Use the PCG Debug visualiser to see point density before spawning meshes — it's much faster.</li>
+          </ol>
+        </div>
+      </details>
+
+      <details class="qa">
+        <summary>I have a photoscanned tropical pack — how should the biomes layer? <span class="q-tag">Q3.2</span></summary>
+        <div class="qa-body">
+          <p>One PCG graph per biome, all sharing the same volume. Each graph filters on a different mask combo:</p>
+          <table class="maps">
+            <thead><tr><th>Biome / asset group</th><th>Mask logic</th><th class="use">Notes</th></tr></thead>
+            <tbody>
+              <tr><td>Beach palms, sea-grape</td><td>Sediment > 0.5 · Elevation &lt; 5&nbsp;m · Slope &lt; 0.2</td><td class="use">Cluster near shore. Add Z-jitter ±0.5&nbsp;m so they read as wind-shaped.</td></tr>
+              <tr><td>Riverbank ferns, taro</td><td>Flow > 0.3 · Soil > 0.3 · Slope &lt; 0.4</td><td class="use">Use a Distance-from-River curve (cheaper alternative: a Flow distance falloff).</td></tr>
+              <tr><td>Canopy trees (large)</td><td>Soil > 0.5 · Slope &lt; 0.35 · Elevation 30–400&nbsp;m</td><td class="use">Lower density (~0.05/m²). Big rotation jitter, scale 0.8–1.4×.</td></tr>
+              <tr><td>Understorey ferns, palms (medium)</td><td>Soil > 0.3 · Curvature &lt; 0 (concave) · Wear > 0.2</td><td class="use">Fills valleys and gullies — that's where the moisture lives.</td></tr>
+              <tr><td>Cliff plants (sparse)</td><td>Slope > 0.6 · Curvature &lt; 0</td><td class="use">Tiny density. Keeps cliffs from looking bald.</td></tr>
+              <tr><td>Ground cover / debris</td><td>Soil > 0.2</td><td class="use">High density, small meshes. Cull at 30&nbsp;m to save GPU.</td></tr>
+            </tbody>
+          </table>
+          <div class="callout tip"><strong>Layer order matters:</strong> spawn canopy trees first, then have understorey filter <em>out</em> a radius around each tree (use <code>Difference</code> / <code>Density Noise</code>) so you don't get ferns clipping through trunks.</div>
+        </div>
+      </details>
+
+      <details class="qa">
+        <summary>Which Gaea-baked maps are most useful here? <span class="q-tag">Q3.3</span></summary>
+        <div class="qa-body">
+          <p>In rough order of importance for tropical foliage:</p>
+          <ol>
+            <li><strong>Slope</strong> — the single biggest gate; without it palms grow on cliffs.</li>
+            <li><strong>Flow</strong> — defines the riparian band (the most visually rewarding biome).</li>
+            <li><strong>Soil / SoilMap</strong> — separates "viable ground" from rock/sand.</li>
+            <li><strong>Sediment</strong> — beach and river-edge zones; lets you put palms specifically on sand.</li>
+            <li><strong>Curvature</strong> — bonus depth: concave = lush, convex = sparser.</li>
+            <li><strong>Wear / Wetness</strong> — moss, lichen, micro-debris.</li>
+            <li><strong>Elevation bands</strong> — coarse altitude biomes; you can also derive this in PCG from the height itself.</li>
+          </ol>
+          <p>Skip <em>Color</em> for PCG — it's only for reference / material tinting.</p>
+        </div>
+      </details>
+
+      <details class="qa">
+        <summary>Performance — how do I keep the editor responsive? <span class="q-tag">Q3.4</span></summary>
+        <div class="qa-body">
+          <ul>
+            <li><strong>HISM by default</strong> — Static Mesh Spawner already uses Hierarchical Instanced. Don't switch to actor instances unless you need per-plant logic.</li>
+            <li><strong>Cull distance per species</strong>: ground-cover 30&nbsp;m, ferns 80&nbsp;m, palms 250&nbsp;m, canopy trees 800&nbsp;m+.</li>
+            <li><strong>Generate per partition</strong> in World Partition setups — the volume only generates within the loaded cells, which is what you want.</li>
+            <li><strong>Bake / cook PCG</strong> for the final shipped map (<em>Generate, then Cook</em>) so the engine isn't re-running the graph at runtime.</li>
+            <li><strong>Nanite</strong> the trunk/branch meshes if the photoscan pack supports it; leaves usually need traditional LODs because of masked materials.</li>
+          </ul>
+        </div>
+      </details>
+    </article>
+  </section>
+
+  <!-- PHASE 4 — WATER -->
+  <section id="phase-4">
+    <article class="phase" data-phase="4">
+      <div class="phase-head">
+        <div class="phase-num">04</div>
+        <div>
+          <h2 class="phase-title">Water — rivers, creeks, ocean</h2>
+          <p class="phase-soft">Water bodies in UE are landscape-modifying actors. Place them <em>before</em> committing to foliage.</p>
+        </div>
+      </div>
+      <p class="phase-goal">Lay down a river / creek system using the Water plugin, take advantage of Gaea's flow data as reference, then trigger any landscape-mask repaints before PCG runs.</p>
+      <div class="pill-row">
+        <span class="pill">Water plugin</span><span class="pill">Splines</span><span class="pill">Landscape carving</span><span class="pill">Single Layer Water</span>
+      </div>
+
+      <details class="qa" open>
+        <summary>How does water work in Unreal? <span class="q-tag">Q4.1</span></summary>
+        <div class="qa-body">
+          <ul>
+            <li><strong>Water plugin</strong> ships with UE. After enabling it, the <em>Place Actors → Water</em> category gives you four bodies: <strong>River</strong>, <strong>Lake</strong>, <strong>Ocean</strong>, <strong>Custom</strong>.</li>
+            <li>Each body is a spline-driven actor. The spline points carry per-point parameters (river width, depth, velocity).</li>
+            <li>The plugin uses <strong>Landmass</strong> brushes under the hood: each water body emits a brush that <em>modifies the landscape geometry</em> beneath it (carves a riverbed, flattens a lakebed). This is non-destructive in the sense that disabling/deleting the actor reverts the change.</li>
+            <li>Rendering is <strong>Single Layer Water</strong> in the master material — translucency with a depth-based fade, refraction, caustics if you enable them.</li>
+            <li><strong>Water Mesh Actor</strong> (added automatically with the first water body) is the global mesh that renders all bodies; don't delete it.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="qa">
+        <summary>How to set up a river / creek? <span class="q-tag">Q4.2</span></summary>
+        <div class="qa-body">
+          <ol>
+            <li><em>Place Actors → Water → Water Body River</em> into the level.</li>
+            <li>Edit the spline: drag points to follow the natural valley you can see in your Gaea-imported terrain. Use the Gaea Flow mask as visual reference (paint it temporarily as a high-contrast landscape layer to see where water "wants to go").</li>
+            <li>Per spline point, tune <em>River Width</em> (5–15&nbsp;m for a creek, 20–60&nbsp;m for a river) and <em>Depth</em>.</li>
+            <li>Add <em>Water Body Lake</em> at any depression where the river pools (lagoons, deltas).</li>
+            <li>Add <em>Water Body Ocean</em> if the scene has a coast — its spline defines the shoreline, and it tiles infinitely outward.</li>
+            <li>Once you're happy with shapes, set the rivers' Landmass brushes to apply, and let the landscape rebuild.</li>
+          </ol>
+          <div class="callout warn"><strong>Save before you carve:</strong> the first time a Water Body River is placed it can move 10&nbsp;000s of landscape verts. Save the level just before, in case you want to revert.</div>
+        </div>
+      </details>
+
+      <details class="qa">
+        <summary>Can I use Gaea's river maps directly? <span class="q-tag">Q4.3</span></summary>
+        <div class="qa-body">
+          <p>Not as splines — UE's Water plugin needs a hand-drawn spline; there is no direct importer for Gaea's vector river data. But Gaea's river / flow output is <strong>extremely useful</strong> in two indirect ways:</p>
+          <ul>
+            <li><strong>Visual guide</strong>: paint the Flow mask onto the landscape (as a paintable layer or a landscape material debug overlay). When you're dragging spline points, you can literally trace the bright pixels.</li>
+            <li><strong>PCG input</strong>: even when the river is hand-placed, the Flow mask is still the cheapest way to drive riparian foliage density (Q3.2). The two systems coexist — UE renders the visible water, Gaea's mask drives the surrounding biology.</li>
+          </ul>
+          <p>If your scene has many small creeks, consider skipping Water Body River for the smallest ones and relying purely on the Flow mask in PCG to scatter wet-zone vegetation — visually you may not need running water for a 50&nbsp;cm creek.</p>
+        </div>
+      </details>
+
+      <details class="qa">
+        <summary>Order of operations — water before foliage, or foliage before water? <span class="q-tag">Q4.4</span></summary>
+        <div class="qa-body">
+          <p><strong>Water first.</strong> Always.</p>
+          <p>Reasoning:</p>
+          <ol>
+            <li>Water bodies <em>modify the landscape geometry</em> (riverbeds carve down, lakebeds flatten). If foliage is already placed, plants in the future riverbed will be either drowned or floating once the carve happens.</li>
+            <li>Carving the landscape changes <em>slope</em> — and slope is one of the main inputs your PCG foliage depends on. Recompute foliage on the post-water landscape and the placement is consistent with what's actually there.</li>
+            <li>Some scattered landscape-layer painting may need to be repainted after carving (e.g. you want a sand layer along the new riverbank). Doing this before PCG means the foliage sees the corrected layers.</li>
+          </ol>
+          <p>Recommended sequence:</p>
+          <ol>
+            <li>Import landscape (Phase 2).</li>
+            <li>Block out water bodies and let them carve.</li>
+            <li>Paint corrective layers on the new banks (sand, mud).</li>
+            <li>Generate PCG foliage (Phase 3).</li>
+            <li>Polish lighting (Phase 5).</li>
+          </ol>
+          <div class="callout tip"><strong>Iteration tip:</strong> water bodies can be temporarily hidden during PCG iteration (faster regenerate) and re-shown when reviewing the look.</div>
+        </div>
+      </details>
+    </article>
+  </section>
+
+  <!-- PHASE 5 — LIGHTING -->
+  <section id="phase-5">
+    <article class="phase" data-phase="5">
+      <div class="phase-head">
+        <div class="phase-num">05</div>
+        <div>
+          <h2 class="phase-title">Lighting &amp; atmosphere</h2>
+          <p class="phase-soft">The Environmental Light Mixer wires up sun, sky, atmosphere and fog in one panel. Then it's tuning, not adding.</p>
+        </div>
+      </div>
+      <p class="phase-goal">Build a believable tropical lighting setup using Lumen GI, Sky Atmosphere, volumetric fog and a tuned post-process volume — and identify the few settings that make or break the look.</p>
+      <div class="pill-row">
+        <span class="pill">Env. Light Mixer</span><span class="pill">Lumen</span><span class="pill">VSM</span><span class="pill">Volumetric Fog</span><span class="pill">Post-Process</span>
+      </div>
+
+      <details class="qa" open>
+        <summary>Where do I open the Environmental Light Mixer, and what does it do? <span class="q-tag">Q5.1</span></summary>
+        <div class="qa-body">
+          <p>Menu: <strong><code>Window → Env. Light Mixer</code></strong>. (UE 5.7 keeps it under Window; some legacy paths show it under <em>Tools → Environment Light Mixer</em>.)</p>
+          <p>The Mixer is a one-stop panel that creates and links the five core lighting actors of any outdoor scene:</p>
+          <ul>
+            <li><strong>Sky Atmosphere</strong> — physically based atmospheric scattering (the "sky" that the sun lights).</li>
+            <li><strong>Sky Light</strong> — captures the atmosphere as ambient/indirect light. Set to <em>Real Time Capture</em> for outdoor scenes so it tracks sun changes.</li>
+            <li><strong>Directional Light</strong> — the sun. Marked as <em>Atmosphere Sun Light</em> so the Sky Atmosphere uses its angle.</li>
+            <li><strong>Volumetric Cloud</strong> — physically based clouds rendered into the atmosphere.</li>
+            <li><strong>Exponential Height Fog</strong> — the workhorse fog actor; turn on <em>Volumetric Fog</em> on it for god rays / depth haze.</li>
+          </ul>
+          <p>Click the small "+" beside each actor and the Mixer adds it to your level pre-wired. Once they exist, you can edit them either from the Mixer (compact) or in the Outliner / Details (full settings).</p>
+        </div>
+      </details>
+
+      <details class="qa">
+        <summary>How does the Mixer work — and what's the right baseline for a tropical scene? <span class="q-tag">Q5.2</span></summary>
+        <div class="qa-body">
+          <p>The Mixer doesn't compute anything itself — it's a UI shortcut. The lighting is whatever the wired actors are doing. A solid tropical baseline:</p>
+          <ul>
+            <li><strong>Directional Light</strong>: Mobility = <em>Movable</em>; Intensity ~3.5 lux (for "sunny day"); a warm temperature (5500–6000&nbsp;K); enable <em>Atmosphere Sun Light</em>; angle ~30–40° above horizon for a "tropical late afternoon" hero look.</li>
+            <li><strong>Sky Atmosphere</strong>: defaults are very good. Bump <em>Multi-Scattering</em> to ~2.5 for the slight haze tropical air gives. Aerial Perspective is on by default.</li>
+            <li><strong>Sky Light</strong>: <em>Real Time Capture</em> = on; <em>Lower Hemisphere is Solid Color</em> = off (so the ground reflects from below); Intensity Scale ~1.0. Recapture if you change atmosphere drastically.</li>
+            <li><strong>Volumetric Cloud</strong>: keep the default <code>m_VolumetricCloud_01</code>; tune coverage in the material instance (~0.5 for partial cloud) — fully cloudy days kill contrast.</li>
+            <li><strong>Exponential Height Fog</strong>: <em>Volumetric Fog</em> = on; <em>Scattering Distribution</em> ~0.7 (forward-scatter for godrays); <em>Volumetric Fog Scattering Color</em> slight warm tint; Density ~0.02–0.05 for jungle haze.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="qa">
+        <summary>What are the most important things to look out for? <span class="q-tag">Q5.3</span></summary>
+        <div class="qa-body">
+          <ol>
+            <li><strong>Lumen, not Lightmass.</strong> Confirm Project Settings → Rendering: GI = Lumen, Reflections = Lumen, Shadow Maps = Virtual. If you see "lighting needs to be rebuilt" warnings, you're on the old static path — switch to Lumen.</li>
+            <li><strong>Sky Light recapture</strong>: dynamic skylight is great, but on big scene changes (new water, big foliage) the capture can lag. Hit <em>Recapture</em> on the actor when the scene "looks washed".</li>
+            <li><strong>Auto-exposure trap</strong>: by default a Post-Process Volume's auto-exposure makes interiors look flat. Lock it down: place an <em>infinite extent</em> Post Process Volume, set Exposure to <em>Manual</em> with EV100 ~9 (outdoor sun), or Histogram with a tight min/max (e.g. 10–13).</li>
+            <li><strong>Directional Light shadows</strong>: enable <em>Cast Cloud Shadows</em> on the directional light if you have volumetric clouds — it sells the scale.</li>
+            <li><strong>Volumetric Fog quality</strong>: <code>r.VolumetricFog.GridPixelSize</code> down to 4 or 8 for crisper godrays in renders (slower in editor — turn back up for editing).</li>
+            <li><strong>Foliage and Lumen</strong>: masked materials with high translucency lose energy quickly. Consider a slight <em>SubsurfaceColor</em> on big leaf materials so they glow when backlit.</li>
+            <li><strong>Tonemapping</strong>: in the Post-Process Volume, color grade with <em>warm shadows / cool highlights</em> for the tropical wet-warm look. Bloom intensity 0.4–0.6, no more.</li>
+            <li><strong>Anti-aliasing</strong>: TSR (default in 5.7) is best for foliage; DLSS/FSR if available improves throughput at render time.</li>
+          </ol>
+          <div class="callout warn"><strong>Render-time vs. editor:</strong> the editor viewport disables some volumetric quality and Lumen detail. Always evaluate the look through <em>Movie Render Queue</em> or a high-res screenshot at final settings before deciding it's wrong.</div>
+        </div>
+      </details>
+
+      <details class="qa">
+        <summary>How do I take the final hero render? <span class="q-tag">Q5.4</span></summary>
+        <div class="qa-body">
+          <ol>
+            <li>Place a <strong>Cine Camera Actor</strong>. Pick a focal length 24–35&nbsp;mm for landscape, 50–85&nbsp;mm for hero details.</li>
+            <li>Add the camera to a <strong>Level Sequence</strong> (even for a still — it gives you a consistent render pipeline).</li>
+            <li>Open <strong>Movie Render Queue</strong> (Window → Cinematics).</li>
+            <li>Settings preset: <em>Path Tracer</em> if you have time and want photographic realism; <em>Deferred</em> + Lumen for fast turn-around.</li>
+            <li>Output: 16-bit EXR (multi-pass) for compositing; or PNG/JPG for direct shareable stills.</li>
+            <li>Spatial / Temporal samples: 8 / 8 minimum for clean fog. 32 / 16 for a hero still on Path Tracer.</li>
+          </ol>
+        </div>
+      </details>
+    </article>
+  </section>
+
+  <!-- GLOSSARY -->
+  <section id="glossary">
+    <h2>Glossary &amp; quick reference</h2>
+    <table class="maps">
+      <thead><tr><th>Term</th><th>What it is</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Heightmap</strong></td><td>A grayscale image where pixel value = terrain elevation. 16-bit avoids stepping.</td></tr>
+        <tr><td><strong>Mask / Splat</strong></td><td>Grayscale image where pixel value = strength of a single layer (slope, flow, soil…).</td></tr>
+        <tr><td><strong>Quad</strong></td><td>The smallest grid square in an Unreal landscape mesh.</td></tr>
+        <tr><td><strong>Component</strong></td><td>A landscape's streaming/culling unit — made of 1 or 4 sections of quads.</td></tr>
+        <tr><td><strong>Magic resolutions</strong></td><td>505, 1009, 2017, 4033, 8129 — Unreal's recommended landscape sizes.</td></tr>
+        <tr><td><strong>PCG</strong></td><td>Procedural Content Generation — UE's node-based scattering / generation framework.</td></tr>
+        <tr><td><strong>HISM</strong></td><td>Hierarchical Instanced Static Mesh — efficient batched rendering for many copies of a mesh.</td></tr>
+        <tr><td><strong>Landmass</strong></td><td>Plugin that enables landscape-modifying brush actors (used by Water).</td></tr>
+        <tr><td><strong>Lumen</strong></td><td>UE5's real-time global illumination + reflections system. Replaces baked lighting for outdoor scenes.</td></tr>
+        <tr><td><strong>VSM</strong></td><td>Virtual Shadow Maps — high-resolution shadows that scale to dense foliage.</td></tr>
+        <tr><td><strong>Path Tracer</strong></td><td>Reference-quality offline renderer in UE; slow but photoreal.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer>
+  <p>Project flowchart for environmental art — Gaea 2.2 → Unreal 5.7. Use the Print / PDF button above to export a copy alongside final renders. Update this document as the project progresses; it doubles as a journal.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  if (typeof mermaid !== "undefined") {
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: "base",
+      themeVariables: {
+        background: "#182722",
+        primaryColor: "#1c2f27",
+        primaryTextColor: "#e8efe9",
+        primaryBorderColor: "#6dd3a8",
+        lineColor: "#a7bcb1",
+        textColor: "#e8efe9",
+        fontSize: "15px"
+      },
+      flowchart: { curve: "basis", padding: 14 }
+    });
+  } else {
+    const wrap = document.querySelector(".mermaid-wrap");
+    if (wrap) {
+      const warn = document.createElement("p");
+      warn.style.color = "#d67a6d";
+      warn.textContent = "Mermaid failed to load (offline?). The detailed phase cards below are the authoritative source.";
+      wrap.appendChild(warn);
+    }
+  }
+</script>
+
+</body>
+</html>

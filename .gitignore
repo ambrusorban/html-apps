@@ -18,3 +18,6 @@ desktop.ini
 *.swp
 *.bak
 *~
+
+# Local-only apps (not published to GitHub)
+shogun2-aup-encyclopedia/
